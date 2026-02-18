@@ -31,6 +31,7 @@ const OutlineButton: React.FC<OutlineButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
+    flex: 1,
     paddingHorizontal: 12,
     paddingVertical: 6,
     margin: 4,
