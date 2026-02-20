@@ -4,6 +4,6 @@ export type Location = {
 };
 
 export type RootStackParamList = {
-  AddPlace: { pickedLocation: Location };
+  AddPlace: { pickedLocation: Location } | undefined;
   Map: undefined;
 };

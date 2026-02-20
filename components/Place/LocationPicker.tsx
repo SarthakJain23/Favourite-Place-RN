@@ -1,27 +1,35 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import {
   getCurrentPositionAsync,
   PermissionStatus,
   useForegroundPermissions,
 } from "expo-location";
-import { useState } from "react";
-import { Alert, Image, StyleSheet, Text, View } from "react-native";
-import { RootStackParamList } from "../../configs/types";
+import { useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import MapView, { Marker, UrlTile } from "react-native-maps";
+import { Location, RootStackParamList } from "../../configs/types";
 import { Colors } from "../../constants/colors";
-import { getMapPreview } from "../../util/location";
 import OutlineButton from "../ui/OutlineButton";
 
-type PickedLocation = {
-  lat: number;
-  lng: number;
-};
-
 const LocationPicker: React.FC = () => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [pickedLocation, setPickedLocation] = useState<PickedLocation | null>(
-    null,
-  );
+  const route = useRoute<RouteProp<RootStackParamList>>();
+  const [pickedLocation, setPickedLocation] = useState<Location | null>(null);
   const [permissionInfo, requestPermission] = useForegroundPermissions();
+
+  useEffect(() => {
+    if (isFocused && route.params) {
+      const mapPickedLocation = route.params.pickedLocation;
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [isFocused, route.params]);
 
   const verifyPermissions = async () => {
     if (!permissionInfo) {
@@ -49,10 +57,7 @@ const LocationPicker: React.FC = () => {
       return;
     }
     const location = await getCurrentPositionAsync();
-    setPickedLocation({
-      lat: location.coords.latitude,
-      lng: location.coords.longitude,
-    });
+    setPickedLocation(location.coords);
   };
   const pickOnMapHandler = () => {
     navigation.navigate("Map");
@@ -62,12 +67,26 @@ const LocationPicker: React.FC = () => {
     <View>
       <View style={styles.mapPreview}>
         {pickedLocation ? (
-          <Image
-            source={{
-              uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),
-            }}
+          <MapView
+            pointerEvents="none"
+            scrollEnabled={false}
+            zoomEnabled={false}
+            rotateEnabled={false}
+            pitchEnabled={false}
             style={styles.mapPreviewImage}
-          />
+            initialRegion={{
+              latitude: pickedLocation.latitude,
+              longitude: pickedLocation.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <UrlTile
+              urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              maximumZ={19}
+            />
+            <Marker coordinate={pickedLocation} />
+          </MapView>
         ) : (
           <Text>No location picked yet.</Text>
         )}
