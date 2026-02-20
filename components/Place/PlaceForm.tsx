@@ -1,11 +1,39 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Location } from "../../configs/types";
 import { Colors } from "../../constants/colors";
+import { getAddress } from "../../utils/location";
+import Button from "../ui/Button";
 import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 
+type PlaceFormState = {
+  title: string;
+  imageUri: string;
+  location: (Location & { address: string }) | null;
+};
+
 const PlaceForm: React.FC = () => {
-  const [enteredTitle, setEnteredTitle] = useState("");
+  const [formState, setFormState] = useState<PlaceFormState>({
+    title: "",
+    imageUri: "",
+    location: null,
+  });
+
+  const pickedTitleHandler = (text: string) => {
+    setFormState((prev) => ({ ...prev, title: text }));
+  };
+
+  const pickedImageHandler = (imageUri: string) => {
+    setFormState((prev) => ({ ...prev, imageUri }));
+  };
+
+  const pickedLocationHandler = async (location: Location) => {
+    const address = await getAddress(location.latitude, location.longitude);
+    setFormState((prev) => ({ ...prev, location: { ...location, address } }));
+  };
+
+  const savePlaceHandler = async () => {};
 
   return (
     <ScrollView style={styles.form}>
@@ -13,12 +41,13 @@ const PlaceForm: React.FC = () => {
         <Text style={styles.label}>Title</Text>
         <TextInput
           style={styles.input}
-          value={enteredTitle}
-          onChangeText={setEnteredTitle}
+          value={formState.title}
+          onChangeText={pickedTitleHandler}
         />
       </View>
-      <ImagePicker />
-      <LocationPicker />
+      <ImagePicker onImagePicked={pickedImageHandler} />
+      <LocationPicker onLocationPicked={pickedLocationHandler} />
+      <Button text="Save Place" onPress={savePlaceHandler} />
     </ScrollView>
   );
 };

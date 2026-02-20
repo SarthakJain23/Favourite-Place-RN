@@ -17,7 +17,13 @@ import { Location, RootStackParamList } from "../../configs/types";
 import { Colors } from "../../constants/colors";
 import OutlineButton from "../ui/OutlineButton";
 
-const LocationPicker: React.FC = () => {
+interface LocationPickerProps {
+  onLocationPicked: (location: Location) => void;
+}
+
+const LocationPicker: React.FC<LocationPickerProps> = ({
+  onLocationPicked,
+}) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList>>();
@@ -28,6 +34,7 @@ const LocationPicker: React.FC = () => {
     if (isFocused && route.params) {
       const mapPickedLocation = route.params.pickedLocation;
       setPickedLocation(mapPickedLocation);
+      onLocationPicked(mapPickedLocation);
     }
   }, [isFocused, route.params]);
 
@@ -58,7 +65,9 @@ const LocationPicker: React.FC = () => {
     }
     const location = await getCurrentPositionAsync();
     setPickedLocation(location.coords);
+    onLocationPicked(location.coords);
   };
+
   const pickOnMapHandler = () => {
     navigation.navigate("Map");
   };

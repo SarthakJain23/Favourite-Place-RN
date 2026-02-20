@@ -8,7 +8,11 @@ import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/colors";
 import OutlineButton from "../ui/OutlineButton";
 
-const ImagePicker: React.FC = () => {
+interface ImagePickerProps {
+  onImagePicked: (imageUri: string) => void;
+}
+
+const ImagePicker: React.FC<ImagePickerProps> = ({ onImagePicked }) => {
   const [pickedImage, setPickedImage] = useState<string>();
   const [permissionInfo, requestPermission] = useCameraPermissions();
 
@@ -43,7 +47,9 @@ const ImagePicker: React.FC = () => {
       quality: 0.5,
     });
     if (!image.canceled) {
-      setPickedImage(image.assets[0].uri);
+      const imageUri = image.assets[0].uri;
+      setPickedImage(imageUri);
+      onImagePicked(imageUri);
     }
   };
 
