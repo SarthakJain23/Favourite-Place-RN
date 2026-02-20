@@ -1,4 +1,9 @@
+export type Location = {
+  latitude: number;
+  longitude: number;
+};
+
 export type RootStackParamList = {
-  AddPlace: undefined;
+  AddPlace: { pickedLocation: Location };
   Map: undefined;
 };

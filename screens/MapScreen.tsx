@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { NavigationProp } from "@react-navigation/native";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { Alert, StyleSheet } from "react-native";
 import MapView, { MapPressEvent, Marker, Region } from "react-native-maps";
+import IconButton from "../components/ui/IconButton";
+import { Location, RootStackParamList } from "../configs/types";
 
-type SelectedLocation = {
-  latitude: number;
-  longitude: number;
-};
+interface MapScreenProps {
+  navigation: NavigationProp<RootStackParamList>;
+}
 
-const MapScreen: React.FC = () => {
-  const [selectedLocation, setSelectedLocation] =
-    useState<SelectedLocation | null>(null);
+const MapScreen: React.FC<MapScreenProps> = ({ navigation }) => {
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null,
+  );
 
   const region: Region = {
     latitude: 37.78825,
@@ -22,6 +25,32 @@ const MapScreen: React.FC = () => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setSelectedLocation({ latitude, longitude });
   };
+
+  const savePickedLocationHandler = useCallback(() => {
+    if (!selectedLocation) {
+      Alert.alert(
+        "No location picked!",
+        "Please pick a location by tapping on the map before saving.",
+      );
+      return;
+    }
+    navigation.navigate("AddPlace", {
+      pickedLocation: selectedLocation,
+    });
+  }, [navigation, selectedLocation]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: ({ tintColor }: { tintColor: string }) => (
+        <IconButton
+          icon="save"
+          size={24}
+          color={tintColor!}
+          onPress={savePickedLocationHandler}
+        />
+      ),
+    });
+  }, [navigation, savePickedLocationHandler]);
 
   return (
     <MapView
