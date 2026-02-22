@@ -16,10 +16,11 @@ type PlaceFormState = {
 };
 
 interface PlaceFormProps {
-  onSavePlace: (placeData: Place) => void;
+  onSavePlace: (placeData: Place) => Promise<void>;
 }
 
 const PlaceForm: React.FC<PlaceFormProps> = ({ onSavePlace }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formState, setFormState] = useState<PlaceFormState>({
     title: "",
     imageUri: "",
@@ -41,21 +42,26 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ onSavePlace }) => {
   };
 
   const savePlaceHandler = async () => {
-    if (
-      !formState.title ||
-      !formState.imageUri ||
-      !formState.address ||
-      !formState.location
-    ) {
-      return;
+    setIsSubmitting(true);
+    try {
+      if (
+        !formState.title ||
+        !formState.imageUri ||
+        !formState.address ||
+        !formState.location
+      ) {
+        return;
+      }
+      const place = new Place(
+        formState.title,
+        formState.imageUri,
+        formState.address,
+        formState.location,
+      );
+      await onSavePlace(place);
+    } finally {
+      setIsSubmitting(false);
     }
-    const place = new Place(
-      formState.title,
-      formState.imageUri,
-      formState.address,
-      formState.location,
-    );
-    onSavePlace(place);
   };
 
   return (
@@ -70,7 +76,11 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ onSavePlace }) => {
       </View>
       <ImagePicker onImagePicked={pickedImageHandler} />
       <LocationPicker onLocationPicked={pickedLocationHandler} />
-      <Button text="Save Place" onPress={savePlaceHandler} />
+      <Button
+        text="Save Place"
+        isLoading={isSubmitting}
+        onPress={savePlaceHandler}
+      />
     </ScrollView>
   );
 };

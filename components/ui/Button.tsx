@@ -1,17 +1,31 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text } from "react-native";
 import { Colors } from "../../constants/colors";
 
 interface ButtonProps {
   text: string;
+  isLoading?: boolean;
   onPress: () => Promise<void>;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, onPress }) => {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  isLoading = false,
+  onPress,
+}) => {
   return (
     <Pressable
-      style={({ pressed }) => [styles.button, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.button,
+        pressed && styles.pressed,
+        isLoading && styles.loading,
+      ]}
       onPress={onPress}
+      disabled={isLoading}
     >
+      {isLoading && (
+        <Ionicons name="hourglass" size={24} color={Colors.primary50} />
+      )}
       <Text style={styles.text}>{text}</Text>
     </Pressable>
   );
@@ -29,6 +43,12 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 0.15,
     borderRadius: 4,
+  },
+  loading: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.primary500,
   },
   pressed: {
     opacity: 0.7,

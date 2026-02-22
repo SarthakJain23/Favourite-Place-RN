@@ -25,7 +25,7 @@ const PlaceList: React.FC<PlaceListProps> = ({ places }) => {
       renderItem={(itemData) => (
         <PlaceItem place={itemData.item} onPress={() => {}} />
       )}
-      keyExtractor={(item) => item["id"]}
+      keyExtractor={(item) => item.getId()}
     />
   );
 };

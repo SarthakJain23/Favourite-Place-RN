@@ -19,4 +19,34 @@ export class Place {
     this.address = address;
     this.location = location;
   }
+
+  getPlaceData() {
+    return {
+      id: this.id,
+      title: this.title,
+      imageUri: this.imageUri,
+      address: this.address,
+      location: this.location,
+    };
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getImageUri() {
+    return this.imageUri;
+  }
+
+  getAddress() {
+    return this.address;
+  }
+
+  getLocation() {
+    return this.location;
+  }
 }
