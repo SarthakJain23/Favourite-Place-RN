@@ -24,6 +24,9 @@ const MapScreen: React.FC<MapScreenProps> = ({ navigation, route }) => {
   };
 
   const selectLocationHandler = (event: MapPressEvent) => {
+    if (pickedLocation) {
+      return;
+    }
     const { latitude, longitude } = event.nativeEvent.coordinate;
     setSelectedLocation({ latitude, longitude });
   };
@@ -42,6 +45,9 @@ const MapScreen: React.FC<MapScreenProps> = ({ navigation, route }) => {
   }, [navigation, selectedLocation]);
 
   useLayoutEffect(() => {
+    if (pickedLocation) {
+      return;
+    }
     navigation.setOptions({
       headerRight: ({ tintColor }: { tintColor: string }) => (
         <IconButton
@@ -52,7 +58,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ navigation, route }) => {
         />
       ),
     });
-  }, [navigation, savePickedLocationHandler]);
+  }, [navigation, pickedLocation, savePickedLocationHandler]);
 
   return (
     <MapView
