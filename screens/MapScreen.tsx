@@ -13,7 +13,7 @@ interface MapScreenProps {
 const MapScreen: React.FC<MapScreenProps> = ({ navigation, route }) => {
   const { pickedLocation } = route.params || {};
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
-    null,
+    pickedLocation ?? null,
   );
 
   const region: Region = {

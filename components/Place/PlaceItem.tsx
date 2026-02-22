@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomLeftRadius: 4,
     borderTopLeftRadius: 4,
-    height: 100,
+    height: "100%",
   },
   info: {
     flex: 2,
