@@ -13,10 +13,10 @@ const PlaceItem: React.FC<PlaceItemProps> = ({ place, onPress }) => {
       onPress={onPress}
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
-      <Image source={{ uri: place.getImageUri() }} style={styles.image} />
+      <Image source={{ uri: place["imageUri"] }} style={styles.image} />
       <View style={styles.info}>
-        <Text style={styles.title}>{place.getTitle()}</Text>
-        <Text style={styles.address}>{place.getAddress()}</Text>
+        <Text style={styles.title}>{place["title"]}</Text>
+        <Text style={styles.address}>{place["address"]}</Text>
       </View>
     </Pressable>
   );

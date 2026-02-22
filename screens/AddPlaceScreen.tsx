@@ -12,7 +12,7 @@ interface AddPlaceScreenProps {
 const AddPlaceScreen: React.FC<AddPlaceScreenProps> = ({ navigation }) => {
   const savePlaceHandler = async (place: Place) => {
     await insertPlace(place);
-    navigation.navigate("AllPlaces", { place });
+    navigation.navigate("AllPlaces");
   };
 
   return <PlaceForm onSavePlace={savePlaceHandler} />;

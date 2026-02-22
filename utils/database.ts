@@ -26,3 +26,9 @@ export const insertPlace = async (place: Place) => {
     longitude,
   );
 };
+
+export const fetchPlaces = async (): Promise<Place[]> => {
+  const db = await SQLite.openDatabaseAsync("places.db");
+  const places = await db.getAllAsync(`SELECT * FROM places`);
+  return places as Place[];
+};

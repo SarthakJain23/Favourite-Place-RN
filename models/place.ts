@@ -29,24 +29,4 @@ export class Place {
       location: this.location,
     };
   }
-
-  getId() {
-    return this.id;
-  }
-
-  getTitle() {
-    return this.title;
-  }
-
-  getImageUri() {
-    return this.imageUri;
-  }
-
-  getAddress() {
-    return this.address;
-  }
-
-  getLocation() {
-    return this.location;
-  }
 }
