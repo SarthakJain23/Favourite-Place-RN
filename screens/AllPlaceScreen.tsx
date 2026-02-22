@@ -1,12 +1,9 @@
 import { RouteProp, useIsFocused } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet } from "react-native";
 import PlaceList from "../components/Place/PlaceList";
-import { RootStackParamList } from "../configs/types";
-import { Colors } from "../constants/colors";
-import { Place } from "../models/place";
-import { fetchPlaces } from "../utils/database";
 import Loader from "../components/ui/Loader";
+import { Place, RootStackParamList } from "../configs/types";
+import { fetchPlaces } from "../utils/database";
 
 interface AllPlaceScreenProps {
   route: RouteProp<RootStackParamList, "AllPlaces">;

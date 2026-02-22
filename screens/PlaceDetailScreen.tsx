@@ -1,22 +1,33 @@
-import { RouteProp } from "@react-navigation/native";
+import { NavigationProp, RouteProp } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Loader from "../components/ui/Loader";
 import OutlineButton from "../components/ui/OutlineButton";
-import { RootStackParamList } from "../configs/types";
+import { Place, RootStackParamList } from "../configs/types";
 import { Colors } from "../constants/colors";
-import { Place } from "../models/place";
 import { fetchPlaceDetails } from "../utils/database";
 
 interface PlaceDetailScreenProps {
+  navigation: NavigationProp<RootStackParamList, "PlaceDetail">;
   route: RouteProp<RootStackParamList, "PlaceDetail">;
 }
 
-const PlaceDetailScreen: React.FC<PlaceDetailScreenProps> = ({ route }) => {
+const PlaceDetailScreen: React.FC<PlaceDetailScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const placeId = route.params.placeId;
   const [place, setPlace] = useState<Place | null>(null);
 
-  const onPressViewOnMapHandler = () => {};
+  const onPressViewOnMapHandler = (place: Place) => {
+    const location = place.location;
+    navigation.navigate("Map", {
+      pickedLocation: {
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+    });
+  };
 
   const loadPlaceDetails = async () => {
     try {
@@ -37,12 +48,15 @@ const PlaceDetailScreen: React.FC<PlaceDetailScreenProps> = ({ route }) => {
 
   return (
     <ScrollView>
-      <Image style={styles.image} source={{ uri: place["imageUri"] }} />
+      <Image style={styles.image} source={{ uri: place.imageUri }} />
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
-          <Text style={styles.address}>{place["address"]}</Text>
+          <Text style={styles.address}>{place.address}</Text>
         </View>
-        <OutlineButton icon="map" onPress={onPressViewOnMapHandler}>
+        <OutlineButton
+          icon="map"
+          onPress={() => onPressViewOnMapHandler(place)}
+        >
           View on Map
         </OutlineButton>
       </View>

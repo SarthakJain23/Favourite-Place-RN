@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { Location } from "../../configs/types";
+import { Location, Place } from "../../configs/types";
 import { Colors } from "../../constants/colors";
-import { Place } from "../../models/place";
 import { getAddress } from "../../utils/location";
 import Button from "../ui/Button";
 import ImagePicker from "./ImagePicker";
@@ -52,12 +51,13 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ onSavePlace }) => {
       ) {
         return;
       }
-      const place = new Place(
-        formState.title,
-        formState.imageUri,
-        formState.address,
-        formState.location,
-      );
+      const place: Place = {
+        id: Date.now(),
+        title: formState.title,
+        imageUri: formState.imageUri,
+        address: formState.address,
+        location: formState.location,
+      };
       await onSavePlace(place);
     } finally {
       setIsSubmitting(false);

@@ -1,6 +1,6 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Place } from "../../configs/types";
 import { Colors } from "../../constants/colors";
-import { Place } from "../../models/place";
 
 interface PlaceItemProps {
   place: Place;
@@ -10,13 +10,13 @@ interface PlaceItemProps {
 const PlaceItem: React.FC<PlaceItemProps> = ({ place, onPress }) => {
   return (
     <Pressable
-      onPress={onPress.bind(this, place["id"])}
+      onPress={onPress.bind(this, place.id)}
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
-      <Image source={{ uri: place["imageUri"] }} style={styles.image} />
+      <Image source={{ uri: place.imageUri }} style={styles.image} />
       <View style={styles.info}>
-        <Text style={styles.title}>{place["title"]}</Text>
-        <Text style={styles.address}>{place["address"]}</Text>
+        <Text style={styles.title}>{place.title}</Text>
+        <Text style={styles.address}>{place.address}</Text>
       </View>
     </Pressable>
   );

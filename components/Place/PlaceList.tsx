@@ -1,8 +1,7 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { RootStackParamList } from "../../configs/types";
+import { Place, RootStackParamList } from "../../configs/types";
 import { Colors } from "../../constants/colors";
-import { Place } from "../../models/place";
 import PlaceItem from "./PlaceItem";
 
 interface PlaceListProps {
@@ -33,7 +32,7 @@ const PlaceList: React.FC<PlaceListProps> = ({ places }) => {
       renderItem={(itemData) => (
         <PlaceItem place={itemData.item} onPress={onPressPlaceItemHandler} />
       )}
-      keyExtractor={(item) => item["id"].toString()}
+      keyExtractor={(item) => item.id.toString()}
     />
   );
 };

@@ -1,8 +1,7 @@
 import { NavigationProp } from "@react-navigation/native";
 import React from "react";
 import PlaceForm from "../components/Place/PlaceForm";
-import { RootStackParamList } from "../configs/types";
-import { Place } from "../models/place";
+import { Place, RootStackParamList } from "../configs/types";
 import { insertPlace } from "../utils/database";
 
 interface AddPlaceScreenProps {

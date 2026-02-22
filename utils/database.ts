@@ -1,5 +1,5 @@
 import * as SQLite from "expo-sqlite";
-import { Place } from "../models/place";
+import { DBPlace, Place } from "../configs/types";
 
 export const init = async () => {
   const db = await SQLite.openDatabaseAsync("places.db");
@@ -15,7 +15,7 @@ export const init = async () => {
 
 export const insertPlace = async (place: Place) => {
   const db = await SQLite.openDatabaseAsync("places.db");
-  const { title, imageUri, address, location } = place.getPlaceData();
+  const { title, imageUri, address, location } = place;
   const { latitude, longitude } = location;
   await db.runAsync(
     `INSERT INTO places (title, imageUri, address, latitude, longitude) VALUES (?, ?, ?, ?, ?)`,
@@ -29,12 +29,37 @@ export const insertPlace = async (place: Place) => {
 
 export const fetchPlaces = async (): Promise<Place[]> => {
   const db = await SQLite.openDatabaseAsync("places.db");
-  const places = await db.getAllAsync(`SELECT * FROM places`);
-  return places as Place[];
+  const places = await db.getAllAsync<DBPlace>(`SELECT * FROM places`);
+  return places.map((dbPlace) => ({
+    id: dbPlace.id,
+    title: dbPlace.title,
+    imageUri: dbPlace.imageUri,
+    address: dbPlace.address,
+    location: {
+      latitude: dbPlace.latitude,
+      longitude: dbPlace.longitude,
+    },
+  }));
 };
 
 export const fetchPlaceDetails = async (id: number): Promise<Place | null> => {
   const db = await SQLite.openDatabaseAsync("places.db");
-  const place = await db.getFirstAsync(`SELECT * FROM places WHERE id = ?`, id);
-  return place as Place;
+  const fetchedPlace = await db.getFirstAsync<DBPlace>(
+    `SELECT * FROM places WHERE id = ?`,
+    id,
+  );
+  if (!fetchedPlace) {
+    return null;
+  }
+  const place: Place = {
+    id: fetchedPlace.id,
+    title: fetchedPlace.title,
+    imageUri: fetchedPlace.imageUri,
+    address: fetchedPlace.address,
+    location: {
+      latitude: fetchedPlace.latitude,
+      longitude: fetchedPlace.longitude,
+    },
+  };
+  return place;
 };
