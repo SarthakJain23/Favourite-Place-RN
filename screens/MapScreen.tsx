@@ -1,4 +1,4 @@
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, RouteProp } from "@react-navigation/native";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { Alert, StyleSheet } from "react-native";
 import MapView, { MapPressEvent, Marker, Region } from "react-native-maps";
@@ -6,17 +6,19 @@ import IconButton from "../components/ui/IconButton";
 import { Location, RootStackParamList } from "../configs/types";
 
 interface MapScreenProps {
-  navigation: NavigationProp<RootStackParamList>;
+  navigation: NavigationProp<RootStackParamList, "Map">;
+  route: RouteProp<RootStackParamList, "Map">;
 }
 
-const MapScreen: React.FC<MapScreenProps> = ({ navigation }) => {
+const MapScreen: React.FC<MapScreenProps> = ({ navigation, route }) => {
+  const { pickedLocation } = route.params || {};
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null,
   );
 
   const region: Region = {
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: pickedLocation ? pickedLocation.latitude : 37.78,
+    longitude: pickedLocation ? pickedLocation.longitude : -122.43,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };

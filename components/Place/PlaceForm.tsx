@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { Location } from "../../configs/types";
 import { Colors } from "../../constants/colors";
+import { Place } from "../../models/place";
 import { getAddress } from "../../utils/location";
 import Button from "../ui/Button";
 import ImagePicker from "./ImagePicker";
@@ -10,14 +11,20 @@ import LocationPicker from "./LocationPicker";
 type PlaceFormState = {
   title: string;
   imageUri: string;
-  location: (Location & { address: string }) | null;
+  location: Location | null;
+  address: string;
 };
 
-const PlaceForm: React.FC = () => {
+interface PlaceFormProps {
+  onSavePlace: (placeData: Place) => void;
+}
+
+const PlaceForm: React.FC<PlaceFormProps> = ({ onSavePlace }) => {
   const [formState, setFormState] = useState<PlaceFormState>({
     title: "",
     imageUri: "",
     location: null,
+    address: "",
   });
 
   const pickedTitleHandler = (text: string) => {
@@ -30,10 +37,26 @@ const PlaceForm: React.FC = () => {
 
   const pickedLocationHandler = async (location: Location) => {
     const address = await getAddress(location.latitude, location.longitude);
-    setFormState((prev) => ({ ...prev, location: { ...location, address } }));
+    setFormState((prev) => ({ ...prev, location, address }));
   };
 
-  const savePlaceHandler = async () => {};
+  const savePlaceHandler = async () => {
+    if (
+      !formState.title ||
+      !formState.imageUri ||
+      !formState.address ||
+      !formState.location
+    ) {
+      return;
+    }
+    const place = new Place(
+      formState.title,
+      formState.imageUri,
+      formState.address,
+      formState.location,
+    );
+    onSavePlace(place);
+  };
 
   return (
     <ScrollView style={styles.form}>

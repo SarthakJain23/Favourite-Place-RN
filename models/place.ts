@@ -1,18 +1,17 @@
+import { Location } from "../configs/types";
+
 export class Place {
   private id: string;
   private title: string;
   private imageUri: string;
   private address: string;
-  private location: {
-    lat: number;
-    lng: number;
-  };
+  private location: Location;
 
   constructor(
     title: string,
     imageUri: string,
     address: string,
-    location: { lat: number; lng: number },
+    location: Location,
   ) {
     this.id = new Date().toString() + Math.random().toString();
     this.title = title;

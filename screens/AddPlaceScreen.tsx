@@ -1,8 +1,19 @@
+import { NavigationProp } from "@react-navigation/native";
 import React from "react";
 import PlaceForm from "../components/Place/PlaceForm";
+import { RootStackParamList } from "../configs/types";
+import { Place } from "../models/place";
 
-const AddPlaceScreen: React.FC = () => {
-  return <PlaceForm />;
+interface AddPlaceScreenProps {
+  navigation: NavigationProp<RootStackParamList, "AddPlace">;
+}
+
+const AddPlaceScreen: React.FC<AddPlaceScreenProps> = ({ navigation }) => {
+  const savePlaceHandler = (place: Place) => {
+    navigation.navigate("AllPlaces", { place });
+  };
+
+  return <PlaceForm onSavePlace={savePlaceHandler} />;
 };
 
 export default AddPlaceScreen;

@@ -21,6 +21,7 @@ const PlaceList: React.FC<PlaceListProps> = ({ places }) => {
   return (
     <FlatList
       data={places}
+      style={styles.list}
       renderItem={(itemData) => (
         <PlaceItem place={itemData.item} onPress={() => {}} />
       )}
@@ -30,6 +31,9 @@ const PlaceList: React.FC<PlaceListProps> = ({ places }) => {
 };
 
 const styles = StyleSheet.create({
+  list: {
+    margin: 24,
+  },
   fallbackContainer: {
     flex: 1,
     justifyContent: "center",

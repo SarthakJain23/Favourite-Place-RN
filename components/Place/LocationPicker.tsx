@@ -26,7 +26,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
 }) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const route = useRoute<RouteProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RootStackParamList, "Map">>();
   const [pickedLocation, setPickedLocation] = useState<Location | null>(null);
   const [permissionInfo, requestPermission] = useForegroundPermissions();
 
@@ -69,7 +69,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   };
 
   const pickOnMapHandler = () => {
-    navigation.navigate("Map");
+    navigation.navigate("Map", pickedLocation ? { pickedLocation } : undefined);
   };
 
   return (
