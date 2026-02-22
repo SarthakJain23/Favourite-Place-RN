@@ -5,6 +5,7 @@ export type Location = {
 
 export type RootStackParamList = {
   AllPlaces: undefined;
+  PlaceDetail: { placeId: number };
   AddPlace: { pickedLocation: Location } | undefined;
   Map: { pickedLocation: Location } | undefined;
 };

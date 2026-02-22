@@ -4,13 +4,13 @@ import { Place } from "../../models/place";
 
 interface PlaceItemProps {
   place: Place;
-  onPress: () => void;
+  onPress: (id: number) => void;
 }
 
 const PlaceItem: React.FC<PlaceItemProps> = ({ place, onPress }) => {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={onPress.bind(this, place["id"])}
       style={({ pressed }) => [styles.item, pressed && styles.pressed]}
     >
       <Image source={{ uri: place["imageUri"] }} style={styles.image} />

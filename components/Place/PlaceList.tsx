@@ -1,4 +1,6 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { RootStackParamList } from "../../configs/types";
 import { Colors } from "../../constants/colors";
 import { Place } from "../../models/place";
 import PlaceItem from "./PlaceItem";
@@ -8,6 +10,8 @@ interface PlaceListProps {
 }
 
 const PlaceList: React.FC<PlaceListProps> = ({ places }) => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   if (!places || places.length === 0) {
     return (
       <View style={styles.fallbackContainer}>
@@ -18,14 +22,18 @@ const PlaceList: React.FC<PlaceListProps> = ({ places }) => {
     );
   }
 
+  const onPressPlaceItemHandler = (placeId: number) => {
+    navigation.navigate("PlaceDetail", { placeId });
+  };
+
   return (
     <FlatList
       data={places}
       style={styles.list}
       renderItem={(itemData) => (
-        <PlaceItem place={itemData.item} onPress={() => {}} />
+        <PlaceItem place={itemData.item} onPress={onPressPlaceItemHandler} />
       )}
-      keyExtractor={(item) => item["id"]}
+      keyExtractor={(item) => item["id"].toString()}
     />
   );
 };

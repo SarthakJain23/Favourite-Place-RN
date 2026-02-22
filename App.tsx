@@ -4,13 +4,15 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import IconButton from "./components/ui/IconButton";
+import { RootStackParamList } from "./configs/types";
 import { Colors } from "./constants/colors";
 import AddPlaceScreen from "./screens/AddPlaceScreen";
 import AllPlaceScreen from "./screens/AllPlaceScreen";
 import MapScreen from "./screens/MapScreen";
+import PlaceDetailScreen from "./screens/PlaceDetailScreen";
 import { init } from "./utils/database";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 SplashScreen.preventAutoHideAsync();
 
@@ -78,6 +80,13 @@ const App: React.FC = () => {
             component={MapScreen}
             options={{
               title: "Map",
+            }}
+          />
+          <Stack.Screen
+            name="PlaceDetail"
+            component={PlaceDetailScreen}
+            options={{
+              title: "Place Details",
             }}
           />
         </Stack.Navigator>

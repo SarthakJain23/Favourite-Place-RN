@@ -32,3 +32,9 @@ export const fetchPlaces = async (): Promise<Place[]> => {
   const places = await db.getAllAsync(`SELECT * FROM places`);
   return places as Place[];
 };
+
+export const fetchPlaceDetails = async (id: number): Promise<Place | null> => {
+  const db = await SQLite.openDatabaseAsync("places.db");
+  const place = await db.getFirstAsync(`SELECT * FROM places WHERE id = ?`, id);
+  return place as Place;
+};

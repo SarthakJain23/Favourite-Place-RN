@@ -1,19 +1,20 @@
 import { Location } from "../configs/types";
 
 export class Place {
-  private id: string;
+  private id: number;
   private title: string;
   private imageUri: string;
   private address: string;
   private location: Location;
 
   constructor(
+    id: number,
     title: string,
     imageUri: string,
     address: string,
     location: Location,
   ) {
-    this.id = new Date().toString() + Math.random().toString();
+    this.id = id;
     this.title = title;
     this.imageUri = imageUri;
     this.address = address;
