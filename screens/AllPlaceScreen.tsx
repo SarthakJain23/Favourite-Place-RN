@@ -6,6 +6,7 @@ import { RootStackParamList } from "../configs/types";
 import { Colors } from "../constants/colors";
 import { Place } from "../models/place";
 import { fetchPlaces } from "../utils/database";
+import Loader from "../components/ui/Loader";
 
 interface AllPlaceScreenProps {
   route: RouteProp<RootStackParamList, "AllPlaces">;
@@ -35,24 +36,10 @@ const AllPlaceScreen: React.FC<AllPlaceScreenProps> = ({ route }) => {
   }, [isFocused]);
 
   if (isLoading) {
-    return (
-      <ActivityIndicator
-        size="large"
-        color={Colors.primary500}
-        style={styles.loadingContainer}
-      />
-    );
+    return <Loader />;
   }
 
   return <PlaceList places={places} />;
 };
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default AllPlaceScreen;

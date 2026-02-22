@@ -1,9 +1,12 @@
 import { RouteProp } from "@react-navigation/native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import Loader from "../components/ui/Loader";
 import OutlineButton from "../components/ui/OutlineButton";
 import { RootStackParamList } from "../configs/types";
 import { Colors } from "../constants/colors";
+import { Place } from "../models/place";
+import { fetchPlaceDetails } from "../utils/database";
 
 interface PlaceDetailScreenProps {
   route: RouteProp<RootStackParamList, "PlaceDetail">;
@@ -11,19 +14,33 @@ interface PlaceDetailScreenProps {
 
 const PlaceDetailScreen: React.FC<PlaceDetailScreenProps> = ({ route }) => {
   const placeId = route.params.placeId;
+  const [place, setPlace] = useState<Place | null>(null);
+
   const onPressViewOnMapHandler = () => {};
 
-  useEffect(() => {}, [placeId]);
+  const loadPlaceDetails = async () => {
+    try {
+      const fetchedPlace = await fetchPlaceDetails(placeId);
+      setPlace(fetchedPlace);
+    } catch (error) {
+      console.error("Failed to load place details:", error);
+    }
+  };
+
+  useEffect(() => {
+    loadPlaceDetails();
+  }, [placeId]);
+
+  if (!place) {
+    return <Loader />;
+  }
 
   return (
     <ScrollView>
-      <Image
-        style={styles.image}
-        source={{ uri: "https://placehold.co/600x400" }}
-      />
+      <Image style={styles.image} source={{ uri: place["imageUri"] }} />
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
-          <Text style={styles.address}>ADDRESS</Text>
+          <Text style={styles.address}>{place["address"]}</Text>
         </View>
         <OutlineButton icon="map" onPress={onPressViewOnMapHandler}>
           View on Map
